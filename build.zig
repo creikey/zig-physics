@@ -14,7 +14,20 @@ pub fn build(b: *std.build.Builder) void {
     const exe = b.addExecutable("zig-physics", "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
+    exe.addIncludeDir("SDL2/include");
+
+    exe.linkLibC();
+    exe.linkSystemLibrary("opengl32");
+    exe.addLibPath("SDL2/lib/x64");
+    exe.linkSystemLibrary("SDL2");
+    
+
+
     exe.install();
+
+    b.installLibFile("SDL2/lib/x64/SDL2.dll", "bin/SDL2.dll");
+    // _ = b.addInstallLibFile(std.build.FileSource.relative("SDL2-2.0.14/lib/x64/SDL2.dll"), "..");
+    // file.install();
 
     const run_cmd = exe.run();
     run_cmd.step.dependOn(b.getInstallStep());
